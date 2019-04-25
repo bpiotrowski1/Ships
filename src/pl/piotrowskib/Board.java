@@ -37,18 +37,27 @@ class Board {
                 return x - 1 > 0 && (board[x - 1][y] == null || board[x - 1][y].getCondition() != 's');
             } else {
                 return x - 1 > 0 && (board[x - 1][y] == null || board[x - 1][y].getCondition() != 's') &&
-                        y - 1 > 0 && (board[x][y - 1] == null || board[x][y - 1].getCondition() != 's');
+                        y - 1 > 0 && (board[x][y - 1] == null || board[x][y - 1].getCondition() != 's') &&
+                        (board[x - 1][y - 1] == null || board[x - 1][y - 1].getCondition() != 's');
             }
         }
     }
 
     void showArea() {
-        for (int i = 0; i < SIZE_X; i++) {
-            for (int j = 0; j < SIZE_Y; j++) {
-                if (board[i][j] == null) {
-                    System.out.print(" ");
-                } else if (board[i][j].getCondition() != 's') {
-                    System.out.print(board[i][j].getCondition());
+        for (int i = -1; i <= SIZE_X; i++) {
+            for (int j = -1; j <= SIZE_Y; j++) {
+                if (i == -1 || i == SIZE_X) {
+                    System.out.print("-");
+                } else if (j == -1 || j == SIZE_Y) {
+                    System.out.print("|");
+                } else {
+                    if (board[i][j] == null) {
+                        System.out.print(" ");
+                    } else if (board[i][j].getCondition() != 's') {
+                        System.out.print(board[i][j].getCondition());
+                    } else {
+                        System.out.print(" ");
+                    }
                 }
             }
             System.out.println();
