@@ -1,5 +1,6 @@
 package pl.piotrowskib;
 
 public interface Ship {
-    void getMastsNumber();
+    char getCondition();
+    void setCondition(char condition);
 }

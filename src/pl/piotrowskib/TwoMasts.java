@@ -1,13 +1,16 @@
 package pl.piotrowskib;
 
 public class TwoMasts implements Ship {
-    private final int masts = 2;
+    private final int MASTS = 2;
+    private char condition = 's';
 
-    public void getMastsNumber() {
-        System.out.println("Mam " + getMasts() + " maszty");
+    @Override
+    public char getCondition() {
+        return condition;
     }
 
-    private int getMasts() {
-        return masts;
+    @Override
+    public void setCondition(char condition) {
+        this.condition = condition;
     }
 }

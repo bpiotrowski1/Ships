@@ -8,13 +8,11 @@ public class Main {
         Board hidden = new Board();
         Scanner in = new Scanner(System.in);
 
-        hidden.generateShipsPosition(hidden.getBoard());
         System.out.println("Sprobuj zestrzelic wszystkie statki ukryte na planszy!\nPamietaj ze poczatek planszy to punkt (0,0)");
         while (hidden.getSumOfShips() > 0) {
-            char[][] board = hidden.getBoard();
             int y, x;
 
-            hidden.showBoard(board);
+            hidden.showArea();
             System.out.print("Podaj x: ");
             y = in.nextInt();
             System.out.print("Podaj y: ");
@@ -24,15 +22,13 @@ public class Main {
             }
             if (x >= Board.getSizeX() || y >= Board.getSizeY() || x < 0 || y < 0) {
                 System.out.println("Bledne koordynaty, sprobuj jeszcze raz");
-            } else if (board[y][x] == 's') {
-                board[y][x] = 'x';
-                System.out.println("Trafiony! Sprobuj trafic kolejny. Pozostalo: " + (hidden.getSumOfShips() - 1));
-                hidden.destroidMast(x, y);
-            } else if (board[y][x] == ' ') {
-                board[y][x] = 'o';
-                System.out.println("Pudlo! Sprobuj jeszcze raz. Pozostalo: " + hidden.getSumOfShips());
+            } else if (hidden.getBoard()[x][y] != null && hidden.getBoard()[x][y].getCondition() == 's') {
+                System.out.println("Trafiony!");
+                hidden.getShip(x, y).setCondition('x');
+            } else if (hidden.getBoard()[x][y] != null && hidden.getBoard()[x][y].getCondition() == 'x') {
+                System.out.println("Tu już probowales sprobuj ponownie");
             } else {
-                System.out.println("W tym miejscu juz probowales, sprobuj ponownie gdzie indziej");
+                System.out.println("Pudło!");
             }
         }
         System.out.println("Gratulacje! Zestrzeliles wszystkie statki!");
