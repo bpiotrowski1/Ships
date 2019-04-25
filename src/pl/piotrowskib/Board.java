@@ -9,23 +9,20 @@ class Board {
     private Ship[][] board = new Ship[SIZE_Y][SIZE_X];
 
     Board() {
-        System.out.println(generateShips());
+        generateShips();
     }
 
-    private int generateShips() {
-        int licznik = 0;
+    private void generateShips() {
         Random rand = new Random();
         for (int i = 0; i < SIZE_X; i++) {
             for (int j = 0; j < SIZE_Y; j++) {
                 if (rand.nextBoolean() && checkArea(i, j)) {
                     board[i][j] = new OneMast();
-                    licznik++;
                 } else {
                     board[i][j] = null;
                 }
             }
         }
-        return licznik;
     }
 
     private boolean checkArea(int x, int y) {
