@@ -24,7 +24,7 @@ public class Main {
                 System.out.println("Bledne koordynaty, sprobuj jeszcze raz");
             } else if (hidden.getBoard()[x][y] != null && hidden.getBoard()[x][y].getCondition() == 's') {
                 System.out.println("Trafiony!");
-                hidden.getShip(x, y).setCondition('x');
+                hidden.destroyShip(x, y);
             } else if (hidden.getBoard()[x][y] != null && hidden.getBoard()[x][y].getCondition() == 'x') {
                 System.out.println("Tu już probowales sprobuj ponownie");
             } else {

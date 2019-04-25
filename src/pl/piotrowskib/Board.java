@@ -2,7 +2,7 @@ package pl.piotrowskib;
 
 import java.util.Random;
 
-public class Board {
+class Board {
     private static final int SIZE_X = 10;
     private static final int SIZE_Y = 10;
     private int sumOfShips = 10;
@@ -45,7 +45,7 @@ public class Board {
         }
     }
 
-    public void showArea() {
+    void showArea() {
         for (int i = 0; i < SIZE_X; i++) {
             for (int j = 0; j < SIZE_Y; j++) {
                 if (board[i][j] == null) {
@@ -58,23 +58,24 @@ public class Board {
         }
     }
 
-    public Ship getShip(int x, int y) {
-        return board[x][y];
+    void destroyShip(int x, int y) {
+        board[x][y].setCondition('x');
+        sumOfShips--;
     }
 
-    public Ship[][] getBoard() {
+    Ship[][] getBoard() {
         return board;
     }
 
-    public static int getSizeX() {
+    static int getSizeX() {
         return SIZE_X;
     }
 
-    public static int getSizeY() {
+    static int getSizeY() {
         return SIZE_Y;
     }
 
-    public int getSumOfShips() {
+    int getSumOfShips() {
         return sumOfShips;
     }
 }
