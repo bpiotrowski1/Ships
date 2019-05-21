@@ -1,4 +1,4 @@
-package pl.piotrowskib;
+package pl.piotrowskib.Interfaces;
 
 public interface Ship {
     char getCondition();

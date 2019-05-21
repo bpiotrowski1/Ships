@@ -1,6 +1,9 @@
-package pl.piotrowskib;
+package pl.piotrowskib.Ships;
 
-public class OneMast implements Ship {
+import pl.piotrowskib.Interfaces.Ship;
+
+public class TwoMasts implements Ship {
+    private final int MASTS = 2;
     private char condition = 's';
 
     @Override

@@ -1,4 +1,4 @@
-package pl.piotrowskib;
+package pl.piotrowskib.Main;
 
 import java.util.Scanner;
 

@@ -1,14 +1,17 @@
-package pl.piotrowskib;
+package pl.piotrowskib.Main;
+
+import pl.piotrowskib.Interfaces.Ship;
+import pl.piotrowskib.Ships.OneMast;
 
 import java.util.Random;
 
-class Board {
+public class Board {
     private static final int SIZE_X = 10;
     private static final int SIZE_Y = 10;
     private int sumOfShips = 10;
     private Ship[][] board = new Ship[SIZE_Y][SIZE_X];
 
-    Board() {
+    public Board() {
         generateShips();
     }
 
@@ -43,7 +46,7 @@ class Board {
         }
     }
 
-    void showArea() {
+    public void showArea() {
         for (int i = -1; i <= SIZE_X; i++) {
             for (int j = -1; j <= SIZE_Y; j++) {
                 if (i == -1 || i == SIZE_X) {
@@ -64,24 +67,24 @@ class Board {
         }
     }
 
-    void destroyShip(int x, int y) {
+    public void destroyShip(int x, int y) {
         board[x][y].setCondition('x');
         sumOfShips--;
     }
 
-    Ship[][] getBoard() {
+    public Ship[][] getBoard() {
         return board;
     }
 
-    static int getSizeX() {
+    public static int getSizeX() {
         return SIZE_X;
     }
 
-    static int getSizeY() {
+    public static int getSizeY() {
         return SIZE_Y;
     }
 
-    int getSumOfShips() {
+    public int getSumOfShips() {
         return sumOfShips;
     }
 }
