@@ -1,15 +1,18 @@
-package pl.piotrowskib.Main;
+package pl.piotrowskib.Board;
 
-import pl.piotrowskib.Interfaces.Ship;
+import lombok.Getter;
+import pl.piotrowskib.Interfaces.IShip;
+import pl.piotrowskib.Ships.NoShip;
 import pl.piotrowskib.Ships.OneMast;
+import pl.piotrowskib.Statics.Constants;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Board {
-    private static final int SIZE_X = 10;
-    private static final int SIZE_Y = 10;
-    private int sumOfShips = 10;
-    private Ship[][] board = new Ship[SIZE_Y][SIZE_X];
+    @Getter private int sumOfShips = 10;
+    @Getter private Map<String, IShip> board = new HashMap<>();
 
     public Board() {
         generateShips();
@@ -17,12 +20,13 @@ public class Board {
 
     private void generateShips() {
         Random rand = new Random();
-        for (int i = 0; i < SIZE_X; i++) {
-            for (int j = 0; j < SIZE_Y; j++) {
+        for (int i = 1; i < Constants.SIZE_X; i++) {
+            for (int j = 1; j < Constants.SIZE_Y; j++) {
+                String cords = String.valueOf(Constants.CORDS[i]) + j;
                 if (rand.nextBoolean() && checkArea(i, j)) {
-                    board[i][j] = new OneMast();
+                    board.put(cords, new OneMast());
                 } else {
-                    board[i][j] = null;
+                    board.put(cords, new NoShip());
                 }
             }
         }
@@ -33,31 +37,34 @@ public class Board {
             if (y == 0) {
                 return true;
             } else {
-                return y - 1 > 0 && (board[x][y - 1] == null || board[x][y - 1].getCondition() != 's');
+                String cords = String.valueOf(Constants.CORDS[x]) + (y - 1);
+                return y - 1 > 0 && (board.get(cords) == null || board.get(cords).getCondition() != 's');
             }
         } else {
+            String cords = String.valueOf(Constants.CORDS[x - 1]) + y;
             if (y == 0) {
-                return x - 1 > 0 && (board[x - 1][y] == null || board[x - 1][y].getCondition() != 's');
+                return x - 1 > 0 && (board.get(cords) == null || board.get(cords).getCondition() != 's');
             } else {
-                return x - 1 > 0 && (board[x - 1][y] == null || board[x - 1][y].getCondition() != 's') &&
-                        y - 1 > 0 && (board[x][y - 1] == null || board[x][y - 1].getCondition() != 's') &&
-                        (board[x - 1][y - 1] == null || board[x - 1][y - 1].getCondition() != 's');
+                String cords2 = String.valueOf(Constants.CORDS[x]) + (y - 1);
+                String cords3 = String.valueOf(Constants.CORDS[x - 1]) + (y - 1);
+                return x - 1 > 0 && (board.get(cords) == null || board.get(cords).getCondition() != 's') &&
+                        y - 1 > 0 && (board.get(cords2) == null || board.get(cords2).getCondition() != 's') &&
+                        (board.get(cords3) == null || board.get(cords3).getCondition() != 's');
             }
         }
     }
 
     public void showArea() {
-        for (int i = -1; i <= SIZE_X; i++) {
-            for (int j = -1; j <= SIZE_Y; j++) {
-                if (i == -1 || i == SIZE_X) {
+        for (int i = 0; i <= Constants.SIZE_X; i++) {
+            for (int j = 0; j <= Constants.SIZE_Y; j++) {
+                if (i == 0 || i == Constants.SIZE_X) {
                     System.out.print("-");
-                } else if (j == -1 || j == SIZE_Y) {
+                } else if (j == 0 || j == Constants.SIZE_Y) {
                     System.out.print("|");
                 } else {
-                    if (board[i][j] == null) {
-                        System.out.print(" ");
-                    } else if (board[i][j].getCondition() != 's') {
-                        System.out.print(board[i][j].getCondition());
+                    String cords = String.valueOf(Constants.CORDS[i]) + j;
+                    if (board.get(cords).getCondition() != 's') {
+                        System.out.print(board.get(cords).getCondition());
                     } else {
                         System.out.print(" ");
                     }
@@ -67,24 +74,16 @@ public class Board {
         }
     }
 
-    public void destroyShip(int x, int y) {
-        board[x][y].setCondition('x');
+    public void destroyShip(String cords) {
+        board.get(cords.toUpperCase()).setCondition('x');
         sumOfShips--;
     }
 
-    public Ship[][] getBoard() {
-        return board;
+    public void miss(String cords) {
+        board.get(cords).setCondition('o');
     }
 
-    public static int getSizeX() {
-        return SIZE_X;
-    }
-
-    public static int getSizeY() {
-        return SIZE_Y;
-    }
-
-    public int getSumOfShips() {
-        return sumOfShips;
+    public IShip getShip(String cords) {
+        return board.get(cords);
     }
 }
