@@ -1,5 +1,8 @@
 package pl.piotrowskib.Main;
 
+import pl.piotrowskib.Board.Board;
+import pl.piotrowskib.Statics.Constants;
+
 import java.util.Scanner;
 
 public class Main {
@@ -8,27 +11,29 @@ public class Main {
         Board hidden = new Board();
         Scanner in = new Scanner(System.in);
 
-        System.out.println("Sprobuj zestrzelic wszystkie statki ukryte na planszy!\nPamietaj ze poczatek planszy to punkt (0,0)");
+        System.out.println("Sprobuj zestrzelic wszystkie statki ukryte na planszy!");
         while (hidden.getSumOfShips() > 0) {
-            int y, x;
+            String cords;
 
             hidden.showArea();
-            System.out.print("Podaj x: ");
-            y = in.nextInt();
-            System.out.print("Podaj y: ");
-            x = in.nextInt();
+            System.out.print("Podaj koordynaty: ");
+            cords = in.nextLine();
             for (int i = 0; i < 3; i++) {
                 System.out.println("\n\n");
             }
-            if (x >= Board.getSizeX() || y >= Board.getSizeY() || x < 0 || y < 0) {
-                System.out.println("Bledne koordynaty, sprobuj jeszcze raz");
-            } else if (hidden.getBoard()[x][y] != null && hidden.getBoard()[x][y].getCondition() == 's') {
-                System.out.println("Trafiony!");
-                hidden.destroyShip(x, y);
-            } else if (hidden.getBoard()[x][y] != null && hidden.getBoard()[x][y].getCondition() == 'x') {
-                System.out.println("Tu już probowales sprobuj ponownie");
-            } else {
-                System.out.println("Pudło!");
+
+            if (cords.length() != 2 && cords.length() != 3) {
+                System.out.println("Błędne koordynaty, sprobuj ponownie");
+            } else if (hidden.getBoard().containsKey(cords.toUpperCase())) {
+                if (hidden.getShip(cords.toUpperCase()).getCondition() == 's') {
+                    System.out.println("Trafiony!");
+                    hidden.destroyShip(cords.toUpperCase());
+                } else if (hidden.getShip(cords.toUpperCase()).getCondition() == 'x' || hidden.getShip(cords.toUpperCase()).getCondition() == 'o') {
+                    System.out.println("Tu już probowales sprobuj ponownie");
+                } else {
+                    System.out.println("Pudło!");
+                    hidden.miss(cords.toUpperCase());
+                }
             }
         }
         System.out.println("Gratulacje! Zestrzeliles wszystkie statki!");

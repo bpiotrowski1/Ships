@@ -5,7 +5,7 @@
 
 ### Budowanie projektu : 
 ##### git clone https://github.com/bpiotrowski1/Ships.git
-##### cd ship/
+##### cd Ships/
 ##### mvn clean package
 ### Uruchomienie projektu :
 ##### mvn compile exec:java -Dexec.mainClass="pl.bpiotrowski1.Main.Main"  
