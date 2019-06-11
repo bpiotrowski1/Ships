@@ -11,8 +11,10 @@ import java.util.Map;
 import java.util.Random;
 
 public class Board {
-    @Getter private int sumOfShips = 10;
-    @Getter private Map<String, IShip> board = new HashMap<>();
+    @Getter
+    private int sumOfShips = 10;
+    @Getter
+    private Map<String, IShip> board = new HashMap<>();
     private int[] shipsToInit = {0, 4, 0, 0, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
 
     public Board() {
@@ -35,18 +37,6 @@ public class Board {
             }
         }
         fillEmpty();
-        /*
-        for (int i = 1; i < Constants.SIZE_X; i++) {
-            for (int j = 1; j < Constants.SIZE_Y; j++) {
-                String cords = String.valueOf(Constants.CORDS[i]) + j;
-                if (rand.nextBoolean() && checkArea(i, j)) {
-                    board.put(cords, new OneMast());
-                } else {
-                    board.put(cords, new NoShip());
-                }
-            }
-        }
-         */
     }
 
     private void fillEmpty() {
@@ -61,25 +51,25 @@ public class Board {
     }
 
     private boolean checkArea(int x, int y) {
-        if (x == 0) {
-            if (y == 0) {
-                return true;
-            } else {
-                String cords = String.valueOf(Constants.CORDS[x]) + (y - 1);
-                return y - 1 > 0 && (board.get(cords) == null || board.get(cords).getCondition() != 's');
-            }
-        } else {
-            String cords = String.valueOf(Constants.CORDS[x]) + y;
-            if (y == 0) {
-                return x - 1 > 0 && (board.get(cords) == null || board.get(cords).getCondition() != 's');
-            } else {
-                String cords2 = String.valueOf(Constants.CORDS[x]) + (y - 1);
-                String cords3 = String.valueOf(Constants.CORDS[x - 1]) + (y - 1);
-                return x - 1 > 0 && (board.get(cords) == null || board.get(cords).getCondition() != 's') &&
-                        y - 1 > 0 && (board.get(cords2) == null || board.get(cords2).getCondition() != 's') &&
-                        (board.get(cords3) == null || board.get(cords3).getCondition() != 's');
-            }
+        boolean isPossibleToCreate = true;
+        if (x + 1 < Constants.SIZE_X && board.containsKey(String.valueOf(Constants.CORDS[x + 1]) + y)) {
+            isPossibleToCreate = false;
+        } else if (x + 1 < Constants.SIZE_X && y + 1 < Constants.SIZE_Y && board.containsKey(String.valueOf(Constants.CORDS[x + 1]) + y + 1)) {
+            isPossibleToCreate = false;
+        } else if (y + 1 < Constants.SIZE_Y && board.containsKey(String.valueOf(Constants.CORDS[x]) + y + 1)) {
+            isPossibleToCreate = false;
+        } else if (x - 1 > 0 && y + 1 < Constants.SIZE_Y && board.containsKey(String.valueOf(Constants.CORDS[x - 1]) + y + 1)) {
+            isPossibleToCreate = false;
+        } else if (x - 1 > 0 && board.containsKey(String.valueOf(Constants.CORDS[x - 1]) + y)) {
+            isPossibleToCreate = false;
+        } else if (x - 1 > 0 && y - 1 > 0 && board.containsKey(String.valueOf(Constants.CORDS[x - 1]) + (y - 1))) {
+            isPossibleToCreate = false;
+        } else if (y - 1 > 0 && board.containsKey(String.valueOf(Constants.CORDS[x]) + (y - 1))) {
+            isPossibleToCreate = false;
+        } else if (x + 1 < Constants.SIZE_X && y - 1 > 0 && board.containsKey(String.valueOf(Constants.CORDS[x + 1]) + (y - 1))) {
+            isPossibleToCreate = false;
         }
+        return isPossibleToCreate;
     }
 
     public void showAreaNoHidden() {
