@@ -15,7 +15,8 @@ public class Main {
         while (hidden.getSumOfShips() > 0) {
             String cords;
 
-            hidden.showArea();
+            //hidden.showArea();
+            hidden.showAreaNoHidden();
             System.out.print("Podaj koordynaty: ");
             cords = in.nextLine();
             for (int i = 0; i < 3; i++) {
