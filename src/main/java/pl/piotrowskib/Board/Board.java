@@ -4,6 +4,7 @@ import lombok.Getter;
 import pl.piotrowskib.Interfaces.IShip;
 import pl.piotrowskib.Ships.NoShip;
 import pl.piotrowskib.Ships.OneMast;
+import pl.piotrowskib.Ships.TwoMasts;
 import pl.piotrowskib.Statics.Constants;
 
 import java.util.HashMap;
@@ -12,41 +13,68 @@ import java.util.Random;
 
 public class Board {
     @Getter
-    private int sumOfShips = 10;
+    private int sumOfShips = 0;
     @Getter
     private Map<String, IShip> board = new HashMap<>();
-    private int[] shipsToInit = {0, 4, 0, 0, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
+    private int[] shipsToInit = {0, 0, 3, 0, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
 
     public Board() {
         generateShips();
     }
 
     private void generateShips() {
-        Random rand = new Random();
         for (int i = 1; i < shipsToInit.length; i++) {
             for (int j = 0; j < shipsToInit[i]; j++) {
-                boolean placed = true;
-                while (placed) {
-                    int x = rand.nextInt(Constants.SIZE_X - 2) + 1, y = rand.nextInt(Constants.SIZE_Y - 2) + 1;
-                    String cords = String.valueOf(Constants.CORDS[x]) + y;
-                    if (rand.nextBoolean() && checkArea(x, y)) {
-                        board.put(cords, new OneMast());
-                        placed = false;
-                    }
+                switch (i) {
+                    case 1:
+                        placeOneMastShip();
+                        break;
+                    case 2:
+                        placeTwoMastShip();
+                        break;
                 }
             }
         }
         fillEmpty();
     }
 
-    private void fillEmpty() {
-        for (int i = 1; i < Constants.SIZE_X; i++) {
-            for (int j = 1; j < Constants.SIZE_Y; j++) {
-                String cords = String.valueOf(Constants.CORDS[i]) + j;
-                if (board.get(cords) == null) {
-                    board.put(cords, new NoShip());
-                }
+    private void placeOneMastShip() {
+        Random rand = new Random();
+        boolean placed = true;
+        while (placed) {
+            int x = rand.nextInt(Constants.SIZE_X - 2) + 1, y = rand.nextInt(Constants.SIZE_Y - 2) + 1;
+            String cords = String.valueOf(Constants.CORDS[x]) + y;
+            if (rand.nextBoolean() && checkArea(x, y)) {
+                board.put(cords, new OneMast());
+                sumOfShips++;
+                placed = false;
             }
+        }
+    }
+
+    private void placeTwoMastShip() {
+        Random rand = new Random();
+        boolean placed = true;
+        while (placed) {
+            int x = rand.nextInt(Constants.SIZE_X - 2) + 1, y = rand.nextInt(Constants.SIZE_Y - 2) + 1;
+            int mastx = destination(x, rand.nextInt(1)), masty = y;
+            String cords = String.valueOf(Constants.CORDS[x]) + y;
+            String mastCord = String.valueOf(Constants.CORDS[mastx]) + masty;
+            if (rand.nextBoolean() && checkArea(x, y) && checkArea(mastx, masty)) {
+                OneMast mast = new OneMast();
+                board.put(mastCord, mast);
+                board.put(cords, new TwoMasts(mast));
+                sumOfShips++;
+                placed = false;
+            }
+        }
+    }
+
+    private int destination(int cord, int d) {
+        if (d == 1) {
+            return cord + 1;
+        } else {
+            return cord - 1;
         }
     }
 
@@ -105,6 +133,17 @@ public class Board {
                 }
             }
             System.out.println();
+        }
+    }
+
+    private void fillEmpty() {
+        for (int i = 1; i < Constants.SIZE_X; i++) {
+            for (int j = 1; j < Constants.SIZE_Y; j++) {
+                String cords = String.valueOf(Constants.CORDS[i]) + j;
+                if (board.get(cords) == null) {
+                    board.put(cords, new NoShip());
+                }
+            }
         }
     }
 
