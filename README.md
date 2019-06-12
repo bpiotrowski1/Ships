@@ -1,11 +1,9 @@
 # Ships
 
-## Autor : Błażej Piotrowski
+## Autor: Błażej Piotrowski
 
 
-### Budowanie projektu : 
+### Budowanie projektu: 
 ##### git clone https://github.com/bpiotrowski1/Ships.git
 ##### cd Ships/
-##### mvn clean package
-### Uruchomienie projektu :
-##### mvn compile exec:java -Dexec.mainClass="pl.bpiotrowski1.Main.Main"  
+##### mvn clean package 
