@@ -16,7 +16,7 @@ public class Board {
     private int sumOfShips = 0;
     @Getter
     private Map<String, IShip> board = new HashMap<>();
-    private int[] shipsToInit = {0, 0, 3, 0, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
+    private int[] shipsToInit = {0, 4, 4, 0, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
 
     public Board() {
         generateShips();
@@ -57,47 +57,53 @@ public class Board {
         boolean placed = true;
         while (placed) {
             int x = rand.nextInt(Constants.SIZE_X - 2) + 1, y = rand.nextInt(Constants.SIZE_Y - 2) + 1;
-            int mastx = destination(x, rand.nextInt(1)), masty = y;
-            String cords = String.valueOf(Constants.CORDS[x]) + y;
-            String mastCord = String.valueOf(Constants.CORDS[mastx]) + masty;
-            if (rand.nextBoolean() && checkArea(x, y) && checkArea(mastx, masty)) {
-                OneMast mast = new OneMast();
-                board.put(mastCord, mast);
-                board.put(cords, new TwoMasts(mast));
-                sumOfShips++;
-                placed = false;
+            int mastx, masty;
+            if (rand.nextInt(2) == 0) {
+                mastx = destination(x);
+                masty = y;
+            } else {
+                mastx = x;
+                masty = destination(y);
+            }
+            if (isPointInBoard(mastx, masty)) {
+                String cords = String.valueOf(Constants.CORDS[x]) + y;
+                String mastCord = String.valueOf(Constants.CORDS[mastx]) + masty;
+                if (rand.nextBoolean() && checkArea(x, y) && checkArea(mastx, masty)) {
+                    OneMast mast = new OneMast();
+                    board.put(mastCord, mast);
+                    board.put(cords, new TwoMasts(mast));
+                    sumOfShips++;
+                    placed = false;
+                }
             }
         }
     }
 
-    private int destination(int cord, int d) {
-        if (d == 1) {
-            return cord + 1;
-        } else {
-            return cord - 1;
-        }
+    private int destination(int cord) {
+        Random rand = new Random();
+        int[] toRand = {-1, 1};
+        return cord + toRand[rand.nextInt(2)];
     }
 
     private boolean checkArea(int x, int y) {
-        boolean isPossibleToCreate = true;
-        if (x + 1 < Constants.SIZE_X && board.containsKey(String.valueOf(Constants.CORDS[x + 1]) + y)) {
-            isPossibleToCreate = false;
-        } else if (x + 1 < Constants.SIZE_X && y + 1 < Constants.SIZE_Y && board.containsKey(String.valueOf(Constants.CORDS[x + 1]) + y + 1)) {
-            isPossibleToCreate = false;
-        } else if (y + 1 < Constants.SIZE_Y && board.containsKey(String.valueOf(Constants.CORDS[x]) + y + 1)) {
-            isPossibleToCreate = false;
-        } else if (x - 1 > 0 && y + 1 < Constants.SIZE_Y && board.containsKey(String.valueOf(Constants.CORDS[x - 1]) + y + 1)) {
-            isPossibleToCreate = false;
-        } else if (x - 1 > 0 && board.containsKey(String.valueOf(Constants.CORDS[x - 1]) + y)) {
-            isPossibleToCreate = false;
-        } else if (x - 1 > 0 && y - 1 > 0 && board.containsKey(String.valueOf(Constants.CORDS[x - 1]) + (y - 1))) {
-            isPossibleToCreate = false;
-        } else if (y - 1 > 0 && board.containsKey(String.valueOf(Constants.CORDS[x]) + (y - 1))) {
-            isPossibleToCreate = false;
-        } else if (x + 1 < Constants.SIZE_X && y - 1 > 0 && board.containsKey(String.valueOf(Constants.CORDS[x + 1]) + (y - 1))) {
-            isPossibleToCreate = false;
+        if (isPointInBoard(x + 1, y) && board.containsKey(String.valueOf(Constants.CORDS[x + 1]) + y)) {
+            return false;
+        } else if (isPointInBoard(x + 1, y + 1) && board.containsKey(String.valueOf(Constants.CORDS[x + 1]) + y + 1)) {
+            return false;
+        } else if (isPointInBoard(x, y + 1) && board.containsKey(String.valueOf(Constants.CORDS[x]) + y + 1)) {
+            return false;
+        } else if (isPointInBoard(x - 1, y + 1) && board.containsKey(String.valueOf(Constants.CORDS[x - 1]) + y + 1)) {
+            return false;
+        } else if (isPointInBoard(x - 1, y) && board.containsKey(String.valueOf(Constants.CORDS[x - 1]) + y)) {
+            return false;
+        } else if (isPointInBoard(x - 1, y - 1) && board.containsKey(String.valueOf(Constants.CORDS[x - 1]) + (y - 1))) {
+            return false;
+        } else if (isPointInBoard(x, y - 1) && board.containsKey(String.valueOf(Constants.CORDS[x]) + (y - 1))) {
+            return false;
+        } else if (isPointInBoard(x + 1, y - 1) && board.containsKey(String.valueOf(Constants.CORDS[x + 1]) + (y - 1))) {
+            return false;
         }
-        return isPossibleToCreate;
+        return true;
     }
 
     public void showAreaNoHidden() {
@@ -145,6 +151,10 @@ public class Board {
                 }
             }
         }
+    }
+
+    private boolean isPointInBoard(int x, int y) {
+        return x > 0 && y > 0 && x < Constants.SIZE_X && y < Constants.SIZE_Y;
     }
 
     public void destroyShip(String cords) {
