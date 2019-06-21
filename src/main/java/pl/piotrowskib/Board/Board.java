@@ -16,7 +16,7 @@ public class Board {
     private int sumOfShips = 0;
     @Getter
     private Map<String, IShip> board = new HashMap<>();
-    private int[] shipsToInit = {0, 15, 1, 0, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
+    private int[] shipsToInit = {0, 4, 3, 0, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
 
     public Board() {
         generateShips();
@@ -30,7 +30,7 @@ public class Board {
                         placeOneMastShip();
                         break;
                     case 2:
-                        placeTwoMastShip();
+                        placeTwoMastsShip();
                         break;
                 }
             }
@@ -52,7 +52,7 @@ public class Board {
         }
     }
 
-    private void placeTwoMastShip() {
+    private void placeTwoMastsShip() {
         Random rand = new Random();
         boolean placed = true;
         while (placed) {
