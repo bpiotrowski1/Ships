@@ -16,7 +16,7 @@ public class Board {
     private int sumOfShips = 0;
     @Getter
     private Map<String, IShip> board = new HashMap<>();
-    private int[] shipsToInit = {0, 4, 4, 0, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
+    private int[] shipsToInit = {0, 15, 1, 0, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
 
     public Board() {
         generateShips();
@@ -44,7 +44,7 @@ public class Board {
         while (placed) {
             int x = rand.nextInt(Constants.SIZE_X - 2) + 1, y = rand.nextInt(Constants.SIZE_Y - 2) + 1;
             String cords = String.valueOf(Constants.CORDS[x]) + y;
-            if (rand.nextBoolean() && checkArea(x, y)) {
+            if (checkArea(x, y)) {
                 board.put(cords, new OneMast());
                 sumOfShips++;
                 placed = false;
@@ -85,22 +85,26 @@ public class Board {
         return cord + toRand[rand.nextInt(2)];
     }
 
+    private String convertToCords(int x, int y) {
+        return String.valueOf(Constants.CORDS[x]) + y;
+    }
+
     private boolean checkArea(int x, int y) {
-        if (isPointInBoard(x + 1, y) && board.containsKey(String.valueOf(Constants.CORDS[x + 1]) + y)) {
+        if (isPointInBoard(x + 1, y) && board.containsKey(convertToCords(x + 1, y))) {
             return false;
-        } else if (isPointInBoard(x + 1, y + 1) && board.containsKey(String.valueOf(Constants.CORDS[x + 1]) + y + 1)) {
+        } else if (isPointInBoard(x + 1, y + 1) && board.containsKey(convertToCords(x + 1, y + 1))) {
             return false;
-        } else if (isPointInBoard(x, y + 1) && board.containsKey(String.valueOf(Constants.CORDS[x]) + y + 1)) {
+        } else if (isPointInBoard(x, y + 1) && board.containsKey(convertToCords(x, y + 1))) {
             return false;
-        } else if (isPointInBoard(x - 1, y + 1) && board.containsKey(String.valueOf(Constants.CORDS[x - 1]) + y + 1)) {
+        } else if (isPointInBoard(x - 1, y + 1) && board.containsKey(convertToCords(x - 1, y + 1))) {
             return false;
-        } else if (isPointInBoard(x - 1, y) && board.containsKey(String.valueOf(Constants.CORDS[x - 1]) + y)) {
+        } else if (isPointInBoard(x - 1, y) && board.containsKey(convertToCords(x - 1, y))) {
             return false;
-        } else if (isPointInBoard(x - 1, y - 1) && board.containsKey(String.valueOf(Constants.CORDS[x - 1]) + (y - 1))) {
+        } else if (isPointInBoard(x - 1, y - 1) && board.containsKey(convertToCords(x - 1, (y - 1)))) {
             return false;
-        } else if (isPointInBoard(x, y - 1) && board.containsKey(String.valueOf(Constants.CORDS[x]) + (y - 1))) {
+        } else if (isPointInBoard(x, y - 1) && board.containsKey(convertToCords(x, (y - 1)))) {
             return false;
-        } else if (isPointInBoard(x + 1, y - 1) && board.containsKey(String.valueOf(Constants.CORDS[x + 1]) + (y - 1))) {
+        } else if (isPointInBoard(x + 1, y - 1) && board.containsKey(convertToCords(x + 1, (y - 1)))) {
             return false;
         }
         return true;
