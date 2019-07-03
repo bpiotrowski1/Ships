@@ -3,20 +3,15 @@ package pl.piotrowskib.Ships;
 import lombok.Getter;
 import lombok.Setter;
 import pl.piotrowskib.Board.Board;
-import pl.piotrowskib.Interfaces.IMultiMasts;
 import pl.piotrowskib.Interfaces.IShip;
 import pl.piotrowskib.Statics.Constants;
 
 import java.util.Random;
 
-public class TwoMasts implements IShip, IMultiMasts {
-    private final static int MASTS = 1;
-    @Setter @Getter private IShip[] masts;
+public class TwoMasts implements IShip {
     @Setter @Getter private char condition = 's';
 
     public TwoMasts(Board board, int x, int y) {
-        this.masts = new IShip[MASTS];
-        masts[0] = new OneMast();
         placeShip(board, x, y);
     }
 
@@ -37,7 +32,7 @@ public class TwoMasts implements IShip, IMultiMasts {
             if (board.isPointInBoard(firstMastX, firstMastY)) {
                 String firstMastCords = String.valueOf(Constants.CORDS[firstMastX]) + firstMastY;
                 if (rand.nextBoolean() && board.checkArea(x, y) && board.checkArea(firstMastX, firstMastY)) {
-                    board.putShip(firstMastCords, masts[0]);
+                    board.putShip(firstMastCords, new OneMast());
                     placed = false;
                 }
             }

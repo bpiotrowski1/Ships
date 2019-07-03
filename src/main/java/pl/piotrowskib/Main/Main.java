@@ -1,7 +1,6 @@
 package pl.piotrowskib.Main;
 
 import pl.piotrowskib.Board.Board;
-import pl.piotrowskib.Statics.Constants;
 
 import java.util.Scanner;
 
