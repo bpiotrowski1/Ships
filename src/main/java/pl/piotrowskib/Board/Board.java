@@ -16,7 +16,7 @@ public class Board {
     private int sumOfShips = 0;
     @Getter
     private Map<String, IShip> board = new HashMap<>();
-    private int[] shipsToInit = {0, 4, 3, 0, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
+    private int[] shipsToInit = {0, 0, 0, 2, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
 
     public Board() {
         generateShips();
@@ -31,6 +31,9 @@ public class Board {
                         break;
                     case 2:
                         placeTwoMastsShip();
+                        break;
+                    case 3:
+                        placeThreeMastsShip();
                         break;
                 }
             }
@@ -67,11 +70,50 @@ public class Board {
             }
             if (isPointInBoard(mastx, masty)) {
                 String cords = String.valueOf(Constants.CORDS[x]) + y;
-                String mastCord = String.valueOf(Constants.CORDS[mastx]) + masty;
+                String mastCords = String.valueOf(Constants.CORDS[mastx]) + masty;
                 if (rand.nextBoolean() && checkArea(x, y) && checkArea(mastx, masty)) {
                     OneMast mast = new OneMast();
-                    board.put(mastCord, mast);
+                    board.put(mastCords, mast);
                     board.put(cords, new TwoMasts(mast));
+                    sumOfShips++;
+                    placed = false;
+                }
+            }
+        }
+    }
+
+    private void placeThreeMastsShip() {
+        Random rand = new Random();
+        boolean placed = true;
+        while (placed) {
+            int x = rand.nextInt(Constants.SIZE_X - 2) + 1, y = rand.nextInt(Constants.SIZE_Y - 2) + 1;
+            int firstMastX, firstMastY, secondMastX, secondMastY;
+
+            if (rand.nextInt(2) == 0) {
+                firstMastX = destination(x);
+                firstMastY = y;
+            } else {
+                firstMastX = x;
+                firstMastY = destination(y);
+            }
+            if (rand.nextInt(2) == 0) {
+                secondMastX = destination(firstMastX);
+                secondMastY = firstMastY;
+            } else {
+                secondMastX = firstMastX;
+                secondMastY = destination(firstMastY);
+            }
+
+            if (isPointInBoard(firstMastX, firstMastY) && isPointInBoard(secondMastX, secondMastY)) {
+                String cords = String.valueOf(Constants.CORDS[x]) + y;
+                String firstMastCords = String.valueOf(Constants.CORDS[firstMastX]) + firstMastY;
+                String secondMastCords = String.valueOf(Constants.CORDS[secondMastX]) + secondMastY;
+                if (rand.nextBoolean() && checkArea(x, y) && checkArea(firstMastX, firstMastY) && checkArea(secondMastX, secondMastY)) {
+                    OneMast firstMast = new OneMast();
+                    OneMast secondMast = new OneMast();
+                    board.put(firstMastCords, firstMast);
+                    board.put(secondMastCords, secondMast);
+                    board.put(cords, new TwoMasts(firstMast));
                     sumOfShips++;
                     placed = false;
                 }
