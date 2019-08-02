@@ -1,12 +1,10 @@
 package pl.piotrowskib.Main;
 
 import pl.piotrowskib.Board.Board;
-import pl.piotrowskib.Statics.Constants;
 
 import java.util.Scanner;
 
 public class Main {
-
     public static void main(String[] args) {
         Board hidden = new Board();
         Scanner in = new Scanner(System.in);
