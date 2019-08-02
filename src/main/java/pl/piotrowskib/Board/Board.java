@@ -12,10 +12,8 @@ import java.util.Random;
 import static pl.piotrowskib.Statics.Constants.SHIPS_TO_INIT;
 
 public class Board {
-    @Getter
-    private int sumOfShips = 0;
-    @Getter
-    private Map<String, IShip> board = new HashMap<>();
+    @Getter private int sumOfShips = 0;
+    @Getter private Map<String, IShip> board = new HashMap<>();
 
     public Board() {
         for (int i = 0; i < SHIPS_TO_INIT.length; i++) {
@@ -32,26 +30,29 @@ public class Board {
         while (!placed) {
             int x = rand.nextInt(Constants.SIZE_X - 2) + 1, y = rand.nextInt(Constants.SIZE_Y - 2) + 1;
             String cords = convertToCords(x, y);
+            IShip ship = new NoShip();
             if (checkArea(x, y)) {
                 switch (masts) {
                     case 1:
-                        board.put(cords, new OneMast());
+                        ship = new OneMast();
                         break;
                     case 2:
-                        board.put(cords, new TwoMasts(this, x, y));
+                        ship = new TwoMasts();
                         break;
                     case 3:
-                        board.put(cords, new ThreeMasts(this, x, y));
+                        ship = new ThreeMasts();
                         break;
                     case 4:
-                        board.put(cords, new FourMasts(this, x, y));
+                        ship = new FourMasts();
                         break;
                 }
+                placed = ship.placeShip(this, x, y);
+                if(placed) {
+                    board.put(cords, ship);
+                }
                 sumOfShips++;
-                placed = true;
             }
         }
-
     }
 
     public void putShip(String cords, IShip mast) {
