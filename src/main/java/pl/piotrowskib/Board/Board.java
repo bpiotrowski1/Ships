@@ -2,30 +2,22 @@ package pl.piotrowskib.Board;
 
 import lombok.Getter;
 import pl.piotrowskib.Interfaces.IShip;
-import pl.piotrowskib.Ships.NoShip;
-import pl.piotrowskib.Ships.OneMast;
-import pl.piotrowskib.Ships.ThreeMasts;
-import pl.piotrowskib.Ships.TwoMasts;
+import pl.piotrowskib.Ships.*;
 import pl.piotrowskib.Statics.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import static pl.piotrowskib.Statics.Constants.SHIPS_TO_INIT;
+
 public class Board {
-    @Getter
-    private int sumOfShips = 0;
-    @Getter
-    private Map<String, IShip> board = new HashMap<>();
-    private int[] shipsToInit = {4, 3, 2, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
+    @Getter private int sumOfShips = 0;
+    @Getter private Map<String, IShip> board = new HashMap<>();
 
     public Board() {
-        generateShips();
-    }
-
-    private void generateShips() {
-        for (int i = 0; i < shipsToInit.length; i++) {
-            for (int j = 0; j < shipsToInit[i]; j++) {
+        for (int i = 0; i < SHIPS_TO_INIT.length; i++) {
+            for (int j = 0; j < SHIPS_TO_INIT[i]; j++) {
                 placeShip(i + 1);
             }
         }
@@ -38,23 +30,29 @@ public class Board {
         while (!placed) {
             int x = rand.nextInt(Constants.SIZE_X - 2) + 1, y = rand.nextInt(Constants.SIZE_Y - 2) + 1;
             String cords = convertToCords(x, y);
+            IShip ship = new NoShip();
             if (checkArea(x, y)) {
                 switch (masts) {
                     case 1:
-                        board.put(cords, new OneMast());
+                        ship = new OneMast();
                         break;
                     case 2:
-                        board.put(cords, new TwoMasts(this, x, y));
+                        ship = new TwoMasts();
                         break;
                     case 3:
-                        board.put(cords, new ThreeMasts(this, x, y));
+                        ship = new ThreeMasts();
+                        break;
+                    case 4:
+                        ship = new FourMasts();
                         break;
                 }
+                placed = ship.placeShip(this, x, y);
+                if(placed) {
+                    board.put(cords, ship);
+                }
                 sumOfShips++;
-                placed = true;
             }
         }
-
     }
 
     public void putShip(String cords, IShip mast) {
@@ -68,7 +66,7 @@ public class Board {
         return cord + toRand[rand.nextInt(2)];
     }
 
-    private String convertToCords(int x, int y) {
+    public String convertToCords(int x, int y) {
         return String.valueOf(Constants.CORDS[x]) + y;
     }
 
