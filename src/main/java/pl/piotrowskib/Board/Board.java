@@ -17,26 +17,16 @@ public class Board {
     private int sumOfShips = 0;
     @Getter
     private Map<String, IShip> board = new HashMap<>();
-    private int[] shipsToInit = {0, 0, 0, 4, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
+    private int[] shipsToInit = {4, 3, 2, 0};    //0x 0mast, 4x 1mast, 3x 2mast, 2x 3mast, 1x 4mast
 
     public Board() {
         generateShips();
     }
 
     private void generateShips() {
-        for (int i = 1; i < shipsToInit.length; i++) {
+        for (int i = 0; i < shipsToInit.length; i++) {
             for (int j = 0; j < shipsToInit[i]; j++) {
-                switch (i) {
-                    case 1:
-                        placeShip(1);
-                        break;
-                    case 2:
-                        placeShip(2);
-                        break;
-                    case 3:
-                        placeShip(3);
-                        break;
-                }
+                placeShip(i + 1);
             }
         }
         fillEmpty();
@@ -47,7 +37,7 @@ public class Board {
         boolean placed = false;
         while (!placed) {
             int x = rand.nextInt(Constants.SIZE_X - 2) + 1, y = rand.nextInt(Constants.SIZE_Y - 2) + 1;
-            String cords = String.valueOf(Constants.CORDS[x]) + y;
+            String cords = convertToCords(x, y);
             if (checkArea(x, y)) {
                 switch (masts) {
                     case 1:

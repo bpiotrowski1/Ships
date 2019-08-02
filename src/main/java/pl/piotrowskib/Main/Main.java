@@ -5,7 +5,6 @@ import pl.piotrowskib.Board.Board;
 import java.util.Scanner;
 
 public class Main {
-
     public static void main(String[] args) {
         Board hidden = new Board();
         Scanner in = new Scanner(System.in);

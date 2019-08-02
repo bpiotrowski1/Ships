@@ -26,22 +26,14 @@ public class ThreeMasts implements IShip {
             if (rand.nextInt(2) == 0) {
                 firstMastX = board.destination(x);
                 firstMastY = y;
+                secondMastX = (x < firstMastX) ? firstMastX + 1 : firstMastX - 1;
+                secondMastY = firstMastY;
             } else {
                 firstMastX = x;
                 firstMastY = board.destination(y);
-            }
-            if (rand.nextInt(2) == 0) {
-                secondMastX = board.destination(firstMastX);
-                secondMastY = firstMastY;
-            } else {
                 secondMastX = firstMastX;
-                secondMastY = board.destination(firstMastY);
+                secondMastY = (y < firstMastY) ? firstMastY + 1 : firstMastY - 1;
             }
-
-            if ((x == firstMastX && y == firstMastY) || (x == secondMastX && y == secondMastY)) {
-                break;
-            }
-
             if (board.isPointInBoard(firstMastX, firstMastY) && board.isPointInBoard(secondMastX, secondMastY)) {
                 String firstMastCords = String.valueOf(Constants.CORDS[firstMastX]) + firstMastY;
                 String secondMastCords = String.valueOf(Constants.CORDS[secondMastX]) + secondMastY;
