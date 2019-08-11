@@ -1,12 +1,24 @@
 package pl.piotrowskib.Main;
 
 import pl.piotrowskib.Board.Board;
+import pl.piotrowskib.Swing.Frame;
 
+import java.awt.*;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Board hidden = new Board();
+        final Board hidden = new Board();
+
+        EventQueue.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                new Frame(hidden);
+            }
+        });
+
+        /*
         Scanner in = new Scanner(System.in);
 
         System.out.println("Sprobuj zestrzelic wszystkie statki ukryte na planszy!");
@@ -36,5 +48,7 @@ public class Main {
             }
         }
         System.out.println("Gratulacje! Zestrzeliles wszystkie statki!");
+
+         */
     }
 }
